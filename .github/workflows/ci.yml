@@ -1,14 +1,15 @@
-name: Kaniko Build / Push to Dockerhub
+name: Docker build
 on: push
 jobs:
-  latest: 
+  docker:
     runs-on: ubuntu-latest
-    env:
-      NODE_VERSION: alpine
     steps:
       - uses: actions/checkout@master
       - name: Kaniko build
         uses: aevea/action-kaniko@master
         with:
-          image: netlify-cli
-          extra_args: --build-arg NODE_VERSION=${{ env.NODE_VERSION}} --build-arg NETLIFY_CLI_VERSION=latest
+          image: aevea/kaniko
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          cache: true
+          cache_registry: aevea/cache
